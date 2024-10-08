@@ -1,0 +1,15 @@
+{
+  "name": "sonatype",
+  "start_urls": ["https://blog.sonatype.com"],
+  "allowed_domains": ["sonatype.com"],
+  "seleniumed": false,
+  "child_seleniumed": false,
+  "save_url_xpath": "//*[@id=\"resource-grid\"]/div/div/div/div/div/div/div/h3/a/@href",
+  "blog_spliced": false,
+  "blog_prefix": "",
+  "clicked": true,
+  "next_page_xpath": "//*[@id=\"resource-grid\"]/div/div/div/div/div[last()]/a/@href",
+  "next_page_spliced": true,
+  "next_page_prefix": "https://www.sonatype.com",
+  "output_dir": "sonatype_result"
+}

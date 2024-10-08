@@ -1,0 +1,15 @@
+{
+  "name": "jfrog",
+  "start_urls": ["https://jfrog.com/blog/"],
+  "allowed_domains": ["jfrog.com"],
+  "seleniumed": true,
+  "child_seleniumed": false,
+  "save_url_xpath": "//*[@id=\"postsWrap\"]/article/header/div/div/div[2]/a/@href",
+  "blog_spliced": false,
+  "blog_prefix": "",
+  "clicked": true,
+  "next_page_xpath": "//*[@id=\"postsWrap\"]/div/nav/div[last()]/a",
+  "next_page_spliced": true,
+  "next_page_prefix": "https://jfrog.com/blog/",
+  "output_dir": "jfrog_result"
+}

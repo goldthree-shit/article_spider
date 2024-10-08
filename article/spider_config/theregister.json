@@ -1,0 +1,15 @@
+{
+  "name": "theregister",
+  "start_urls": ["https://www.theregister.com/security"],
+  "allowed_domains": ["theregister.com"],
+  "seleniumed": false,
+  "child_seleniumed": false,
+  "save_url_xpath": "//*[@class='story_link']/@href",
+  "blog_spliced": true,
+  "blog_prefix": "https://www.theregister.com/",
+  "clicked": true,
+  "next_page_xpath": "//*[@id=\"main-col\"]/div/a/@href",
+  "next_page_spliced": true,
+  "next_page_prefix": "https://www.theregister.com/",
+  "output_dir": "theregister_result"
+}

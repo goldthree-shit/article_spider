@@ -1,0 +1,15 @@
+{
+  "name": "iqt",
+  "start_urls": ["https://www.iqt.org/knowledge-hub?category=Cyber#full-library"],
+  "allowed_domains": ["iqt.org"],
+  "seleniumed": true,
+  "child_seleniumed": false,
+  "save_url_xpath": "//*[@id=\"full-library\"]/div[2]/div[1]/div/a/@href",
+  "blog_spliced": true,
+  "blog_prefix": "https://www.iqt.org",
+  "clicked": true,
+  "next_page_xpath": "//*[@id=\"full-library\"]/div[2]/div[3]/a[2]",
+  "next_page_spliced": false,
+  "next_page_prefix": "https://www.iqt.org",
+  "output_dir": "iqt_result"
+}

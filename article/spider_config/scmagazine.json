@@ -1,0 +1,15 @@
+{
+  "name": "scmagazine",
+  "start_urls": ["https://www.scmagazine.com"],
+  "allowed_domains": ["scmagazine.com"],
+  "seleniumed": true,
+  "child_seleniumed": false,
+  "save_url_xpath": "//*[@id=\"__next\"]/div/div[1]/div[3]/main/div/div[4]/div/div[2]/section/div/div/article/div/div/a/@href",
+  "blog_spliced": true,
+  "blog_prefix": "https://www.scmagazine.com",
+  "clicked": false,
+  "next_page_xpath": "",
+  "next_page_spliced": false,
+  "next_page_prefix": "",
+  "output_dir": "scmagazine_result"
+}

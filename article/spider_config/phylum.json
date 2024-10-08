@@ -1,0 +1,15 @@
+{
+  "name": "phylum",
+  "start_urls": ["https://blog.phylum.io/"],
+  "allowed_domains": ["phylum.io"],
+  "seleniumed": false,
+  "child_seleniumed": false,
+  "save_url_xpath": "/html/body/div[1]/div/div/main/div[1]/div/div[2]/article/div/div[2]/header/h2/a/@href",
+  "blog_spliced": true,
+  "blog_prefix": "https://blog.phylum.io/",
+  "clicked": true,
+  "next_page_xpath": "/html/body/div[1]/div/div/main/div[2]/div/nav/div[2]/a/@href",
+  "next_page_spliced": true,
+  "next_page_prefix": "https://blog.phylum.io/",
+  "output_dir": "phylum_result"
+}

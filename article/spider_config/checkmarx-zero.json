@@ -1,0 +1,15 @@
+{
+  "name": "checkmarx-zero",
+  "start_urls": ["https://medium.com/checkmarx-security"],
+  "allowed_domains": ["checkmarx.com", "medium.com"],
+  "seleniumed": true,
+  "child_seleniumed": true,
+  "save_url_xpath": "//*[@id=\"root\"]/div/div[3]/div[2]/div/main/div/div[2]/div/div/div/div/article/div/div/div/div/div[1]/div/div[2]/div[1]/div[1]/a/@href",
+  "blog_spliced": true,
+  "blog_prefix": "https://zero.checkmarx.com",
+  "clicked": false,
+  "next_page_xpath": "",
+  "next_page_spliced": false,
+  "next_page_prefix": "",
+  "output_dir": "checkmarx-zero_result"
+}

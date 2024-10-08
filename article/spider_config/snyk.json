@@ -1,0 +1,15 @@
+{
+  "name": "snyk",
+  "start_urls": ["https://snyk.io/blog/category/application-security"],
+  "allowed_domains": ["snyk.io"],
+  "seleniumed": false,
+  "child_seleniumed": false,
+  "save_url_xpath": "//*[@id=\"__next\"]/div/main/section/div/div/div/a[article]/@href",
+  "blog_spliced": true,
+  "blog_prefix": "https://snyk.io",
+  "clicked": true,
+  "next_page_xpath": "//*[@id=\"__next\"]/div/main/section/div/div[4]/div/a[last()]/@href",
+  "next_page_spliced": true,
+  "next_page_prefix": "https://snyk.io",
+  "output_dir": "snyk_result"
+}

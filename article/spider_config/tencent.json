@@ -1,0 +1,15 @@
+{
+  "name": "tencent",
+  "start_urls": ["https://security.tencent.com/index.php/blog"],
+  "allowed_domains": ["tencent.com"],
+  "seleniumed": false,
+  "child_seleniumed": false,
+  "save_url_xpath": "/html/body/div[2]/div/div[2]/div/div[1]/div[2]/ul/li/div[2]/div[1]/a/@href",
+  "blog_spliced": true,
+  "blog_prefix": "https://security.tencent.com/",
+  "clicked": true,
+  "next_page_xpath": "/html/body/div[2]/div/div[2]/div/div[1]/div[3]/ul/li[last()-1]/a/@href",
+  "next_page_spliced": false,
+  "next_page_prefix": "",
+  "output_dir": "tencent_result"
+}

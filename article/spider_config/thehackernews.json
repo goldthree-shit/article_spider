@@ -1,0 +1,15 @@
+{
+  "name": "thehackernews",
+  "start_urls": ["https://thehackernews.com"],
+  "allowed_domains": ["thehackernews.com"],
+  "seleniumed": false,
+  "child_seleniumed": false,
+  "save_url_xpath": "//*[@id=\"Blog1\"]/div[1]/div/a/@href",
+  "blog_spliced": false,
+  "blog_prefix": "",
+  "clicked": true,
+  "next_page_xpath": "//*[@id=\"Blog1_blog-pager-older-link\"]/@href",
+  "next_page_spliced": false,
+  "next_page_prefix": "",
+  "output_dir": "thehackernews_result"
+}

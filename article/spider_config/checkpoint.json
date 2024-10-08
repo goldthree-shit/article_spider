@@ -1,0 +1,15 @@
+{
+  "name": "checkpoint",
+  "start_urls": ["https://blog.checkpoint.com/"],
+  "allowed_domains": ["checkpoint.com"],
+  "seleniumed": true,
+  "child_seleniumed": true,
+  "save_url_xpath": "/html/body/div[2]/div/div[3]/div/div/div/div/article/div[1]/a/@href",
+  "blog_spliced": false,
+  "blog_prefix": "",
+  "clicked": true,
+  "next_page_xpath": "/html/body/div[2]/div/div[3]/div/div/nav/div/a[last()]",
+  "next_page_spliced": false,
+  "next_page_prefix": "",
+  "output_dir": "checkpoint_result"
+}
