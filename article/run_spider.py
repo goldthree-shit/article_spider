@@ -8,15 +8,15 @@ def crawl_website(website):
     process.crawl(MainCrawlSpider, spider_target=website)
     process.start()
 
-# if __name__ == '__main__':
-#     target_websites = ["githubblog", "jfrog", "sonatype", "snyk", "tencent", "checkpoint",
-#                        "checkmarx-blog", "theregister", "securityintelligence", "thehackernews", "phylum", "iqt"]
-#
-#     with multiprocessing.Pool(processes=len(target_websites)) as pool:
-#         pool.map(crawl_website, target_websites)
-
 if __name__ == '__main__':
-    crawl_website("checkpoint")
+    target_websites = ["githubblog", "jfrog", "sonatype", "snyk", "tencent", "checkpoint",
+                       "checkmarx-blog", "theregister", "securityintelligence", "thehackernews", "phylum", "iqt"]
+
+    with multiprocessing.Pool(processes=len(target_websites)) as pool:
+        pool.map(crawl_website, target_websites)
+
+# if __name__ == '__main__':
+#     crawl_website("checkpoint")
 
 
 
