@@ -22,7 +22,7 @@ MITER ATLAS
 - https://www.scmagazine.com done, 通过滚动翻页，所以需要滚动到最底下之后，在爬取
 - https://blog.phylum.io/ done
 - https://socket.dev/blog done
-- https://www.reversinglabs.com/blog
+- https://www.reversinglabs.com/blog done
 # 需要安装的依赖 
 ```shell
 pip install scrapy
