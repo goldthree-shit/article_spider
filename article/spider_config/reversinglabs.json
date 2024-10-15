@@ -1,0 +1,15 @@
+{
+  "name": "reversinglabs",
+  "start_urls": ["https://www.reversinglabs.com/blog/page/1"],
+  "allowed_domains": ["reversinglabs.com"],
+  "seleniumed": false,
+  "child_seleniumed": false,
+  "save_url_xpath": "//*[@id=\"hs_cos_wrapper_module_1523032069834331\"]/div/div[2]/article/div/h3/a/@href",
+  "blog_spliced": false,
+  "blog_prefix": "",
+  "clicked": true,
+  "next_page_xpath": "//*[@id=\"hs_cos_wrapper_module_1523032069834331\"]/div/div[3]/a[last()]/@href",
+  "next_page_spliced": false,
+  "next_page_prefix": "",
+  "output_dir": "reversinglabs_result"
+}

@@ -1,0 +1,15 @@
+{
+  "name": "socketdev",
+  "start_urls": ["https://socket.dev/blog"],
+  "allowed_domains": ["socket.dev"],
+  "seleniumed": false,
+  "child_seleniumed": false,
+  "save_url_xpath": "//*[@id=\"__next\"]/div/div/div/div/div[2]/div/div[2]/div/article/div//@href",
+  "blog_spliced": true,
+  "blog_prefix": "https://socket.dev",
+  "clicked": true,
+  "next_page_xpath": "//*[@id='1']",
+  "next_page_spliced": false,
+  "next_page_prefix": "",
+  "output_dir": "socketdev_result"
+}
