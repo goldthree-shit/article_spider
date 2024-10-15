@@ -20,6 +20,11 @@ USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTM
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = False
 
+# 每次请求之间的固定延迟时间 (例如 2 秒)
+DOWNLOAD_DELAY = 2
+# 最大并发请求数量
+CONCURRENT_REQUESTS = 2
+
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 #CONCURRENT_REQUESTS = 32
 
