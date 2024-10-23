@@ -1,0 +1,15 @@
+{
+  "name": "fortinet",
+  "start_urls": ["https://www.fortinet.com/blog"],
+  "allowed_domains": ["fortinet.com"],
+  "seleniumed": true,
+  "child_seleniumed": false,
+  "save_url_xpath": "/html/body/div[1]/div/section[2]/div[1]/div/div[1]/div[2]/h2/a/@href",
+  "blog_spliced": true,
+  "blog_prefix": "https://www.fortinet.com",
+  "clicked": true,
+  "next_page_xpath": "/html/body/div[1]/div/section[2]/div[2]/button",
+  "next_page_spliced": false,
+  "next_page_prefix": "",
+  "output_dir": "fortinet_result"
+}

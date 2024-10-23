@@ -12,7 +12,7 @@ MITER ATLAS
 - https://medium.com/checkmarx-security -重定向> https://zero.checkmarx.com/, fail，selenium打不开，一直显示加载时间过长
 - https://blog.checkpoint.com done
 4. 媒体 
-- https://www.bleepingcomputer.com/news/security  fail，需要js 和 cookies，并且有selenium真人检测，无法规避
+- https://www.bleepingcomputer.com/news/security  done/fail, 偶尔会触发真人检测，尚不清楚规律，需要js 和 cookies，并且有selenium真人检测，无法规避
 - https://www.theregister.com/security   done
 - https://securityintelligence.com/news done，由于html源文件有问题，需要使用selenium进行修复之后，取快照在进行提取，
 - https://thehackernews.com  done
@@ -23,6 +23,9 @@ MITER ATLAS
 - https://blog.phylum.io/ done
 - https://socket.dev/blog done
 - https://www.reversinglabs.com/blog done
+- https://cybersecuritynews.com/ done
+- https://www.fortinet.com/blog done
+- 
 # 需要安装的依赖 
 ```shell
 pip install scrapy
@@ -50,6 +53,6 @@ python run_spider
   "next_page_xpath": "//*[@id=\"start-of-content\"]/div[2]/div/div[2]/nav/div/a[last()]/@href", // 翻页的xpath位置，如果是使用selenium进行翻页，无需/@href部分
   "next_page_spliced": false,                     // 翻页的url是否需要拼接前缀，仅在使用scrapy时work
   "next_page_prefix": "",                          // 翻页的url是否具体拼接前缀，仅在next_page_spliced=true时work
-  "output_dir": "githubblg_result"              // 爬取到的结果输出的文件夹
+  "output_dir": "githubblg_result"              // 爬取到的结果输出的文件夹, 可以采用相对/绝对
 }
 ```

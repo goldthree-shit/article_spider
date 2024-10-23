@@ -10,13 +10,13 @@ def crawl_website(website):
 
 # if __name__ == '__main__':
 #     target_websites = ["githubblog", "jfrog", "sonatype", "snyk", "tencent", "checkpoint",
-#                        "checkmarx-blog", "theregister", "securityintelligence", "thehackernews", "phylum", "iqt"]
+#                        "checkmarx-blog", "theregister", "securityintelligence", "thehackernews", "phylum", "iqt", "reversinglabs"]
 #
 #     with multiprocessing.Pool(processes=len(target_websites)) as pool:
 #         pool.map(crawl_website, target_websites)
 
 if __name__ == '__main__':
-    crawl_website("reversinglabs")
+    crawl_website("bleepingcomputer")
 
 
 

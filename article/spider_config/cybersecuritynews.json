@@ -1,0 +1,15 @@
+{
+  "name": "cybersecuritynews",
+  "start_urls": ["https://cybersecuritynews.com/"],
+  "allowed_domains": ["cybersecuritynews.com"],
+  "seleniumed": true,
+  "child_seleniumed": false,
+  "save_url_xpath": "//*[@id=\"tdi_21\"]/div/div/div/h3/a/@href",
+  "blog_spliced": false,
+  "blog_prefix": "",
+  "clicked": true,
+  "next_page_xpath": "//*[@id=\"next-page-tdi_21\"]",
+  "next_page_spliced": false,
+  "next_page_prefix": "",
+  "output_dir": "cybersecuritynews_result"
+}
