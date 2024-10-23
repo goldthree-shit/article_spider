@@ -15,8 +15,14 @@ def crawl_website(website):
 #     with multiprocessing.Pool(processes=len(target_websites)) as pool:
 #         pool.map(crawl_website, target_websites)
 
+# if __name__ == '__main__':
+#     crawl_website("bleepingcomputer")
+
 if __name__ == '__main__':
-    crawl_website("bleepingcomputer")
+    target_websites = ["bleepingcomputer", "fortinet", "cybersecuritynews"]
+
+    with multiprocessing.Pool(processes=len(target_websites)) as pool:
+        pool.map(crawl_website, target_websites)
 
 
 
