@@ -94,7 +94,6 @@ CONCURRENT_REQUESTS = 2
 #HTTPCACHE_STORAGE = "scrapy.extensions.httpcache.FilesystemCacheStorage"
 
 ITEM_PIPELINES = {
-# 当开启该管道，该管道将会把数据存入到redis数据库中
     'article.pipelines.ArticlePipeline': 400
 }
 
