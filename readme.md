@@ -30,11 +30,24 @@ MITER ATLAS
 ```shell
 pip install scrapy
 pip install selenium
+自行百度chrome浏览器的安装，以及相应的驱动
 ```
 # 启动程序 
 ```shell
 cd /article
+python run_spider args1 args2 ...
+# 说明 不带参数就会默认爬取全部（spider_config文件夹下定义的全部），且会全量爬取(参数full(默认)/add确定，加在最后)
 python run_spider
+# 等于
+python run_spider full
+# 如果需要对全部的进行增量爬取
+python run_spider add
+# 带参数就只会爬取参数部分的， python run_spider args1 args2
+python run_spider fortinent iqt # 就只会爬取 fortinent， iqt, 默认是full
+# 等同于 
+python run_spider fortinent iqt full
+# 如果需要 add
+python run_spider fortinent iqt add
 ```
 # 配置文件说明
 - 存放的文件夹 `/article_crawl/article/spider_cinfig`

@@ -4,9 +4,16 @@
 # See: https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 import hashlib
 import json
-from pathlib import Path
-from .config import default_logger as logger
 import os
+from pathlib import Path
+
+from scrapy import signals
+
+from .config import default_logger as logger
+
+from .signals import spider_stop_signal
+from .signals import existed_signal
+
 class ArticlePipeline:
     def process_item(self, item, spider=None):
         url = item['url']
@@ -19,6 +26,8 @@ class ArticlePipeline:
 
         sha = hashlib.sha1(download_html.encode("utf-8")).hexdigest()
         if self.check_existed(url, output_dir, sha):
+            spider_stop_signal.send_catch_log(existed_signal)
+
             return item
         logger.info("{} saved".format(url))
 

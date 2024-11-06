@@ -4,7 +4,7 @@ import time
 import os
 
 # 日志设置
-def setup_logger(name='my_logger'):
+def setup_logger(name):
     logger = logging.getLogger(name)
     logger.setLevel(logging.INFO)
 
@@ -22,7 +22,7 @@ def setup_logger(name='my_logger'):
     file_handler.setLevel(logging.INFO)
 
     # 创建格式器，并添加到处理器
-    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    formatter = logging.Formatter(f'[{name}] %(asctime)s - %(name)s - %(levelname)s - %(message)s')
     console_handler.setFormatter(formatter)
     file_handler.setFormatter(formatter)
 
@@ -33,5 +33,5 @@ def setup_logger(name='my_logger'):
 
     return logger
 
-# 设置默认日志记录器
-default_logger = setup_logger()
+ # 设置默认日志记录器
+default_logger = setup_logger('pipeline')

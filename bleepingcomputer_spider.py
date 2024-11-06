@@ -19,7 +19,7 @@ logging.basicConfig(
 
 # 配置 Chrome 选项
 chrome_options = Options()
-# chrome_options.add_argument('--headless')  # 启用无头模式，不弹出浏览器窗口
+chrome_options.add_argument('--headless')  # 启用无头模式，不弹出浏览器窗口
 chrome_options.add_argument('--disable-gpu')  # 禁用GPU，避免某些系统问题
 chrome_options.add_argument("--disable-blink-features=AutomationControlled")
 driver = webdriver.Chrome(options=chrome_options)

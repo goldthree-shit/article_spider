@@ -4,19 +4,24 @@ import time
 import scrapy
 from scrapy.selector import Selector
 from selenium import webdriver
+from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
-from ..pipelines import ArticlePipeline
-from ..config import default_logger as logger
+
+from ..config import setup_logger
 from ..items import ArticleItem
-from selenium.common.exceptions import NoSuchElementException
+from ..pipelines import ArticlePipeline
+from ..signals import existed_signal
+from ..signals import spider_stop_signal
+
 
 class MainCrawlSpider(scrapy.Spider):
     name = "main_crawl"
 
-    def __init__(self, spider_target=None, *args, **kwargs):
+    def __init__(self, param, *args, **kwargs):
         super(MainCrawlSpider, self).__init__(*args, **kwargs)
         self.requested_urls = set()
+        self.spider_name = None
         self.driver = None
         self.output_dir = None
         self.next_page_prefix = None
@@ -29,11 +34,16 @@ class MainCrawlSpider(scrapy.Spider):
         self.child_seleniumed = None
         self.seleniumed = None
         self.allowed_domains = None
-        self.init(spider_target)
+        self.init(param['target_websites'])
+        self.stop_signal_received = False
+        # true： 全量模式  false：增量模式
+        self.full_mode = param['full_mode']
+        self.my_log = setup_logger(self.spider_name)
 
     # 初始化，配置爬虫的相关信息
     def init(self, spider_target):
         config = self.load_config_from_json(spider_target)
+        self.spider_name = config['name']
         self.start_urls = config['start_urls']
         self.allowed_domains = config['allowed_domains']
         # 起始页面是否需要selenium的支持
@@ -64,25 +74,30 @@ class MainCrawlSpider(scrapy.Spider):
             chrome_options.add_argument('--headless')  # 启用无头模式，不弹出浏览器窗口
             chrome_options.add_argument('--disable-gpu')  # 禁用GPU，避免某些系统问题
             chrome_options.add_argument("--disable-blink-features=AutomationControlled")
+            chrome_options.add_argument("--ignore-certificate-errors")  # 忽略 SSL 证书错误
+            chrome_options.add_argument("--ignore-ssl-errors=yes")  # 忽略 SSL 错误
             self.driver = webdriver.Chrome(options=chrome_options)
 
     def load_config_from_json(self, spider_target):
         # 根据需要爬取的网站名称，读取配置文件
         with open(f'spider_config/{spider_target}.json', 'r', encoding='utf-8') as f:
             config = json.load(f)
-        logger.info(f"project config: {config}")
         return config
 
 
     def start_requests(self):
         # 如果需要selenium的支持，注意会比较慢，翻页和滚动都通过selenium进行
         if self.seleniumed:
-            logger.info("use selenium")
+            self.my_log.info("use selenium")
             # Selenium 加载页面
             self.driver.get(self.start_urls[0])
             # 如果需要点击翻页
             if self.clicked:
                 while True:
+                    spider_stop_signal.connect(self.spider_stop_handler_selenium, existed_signal)
+                    # 如果接收到停止信号 并且当前模式是增量模式
+                    if self.stop_signal_received:
+                        break
                     time.sleep(5)
                     # 获取页面源码
                     page_source = self.driver.page_source
@@ -91,24 +106,24 @@ class MainCrawlSpider(scrapy.Spider):
                     elements = selector.xpath(self.save_url_xpath)
                     for element in elements:
                         paper_link = self.blog_prefix + element.extract() if self.blog_spliced else element.extract()
-                        logger.info(f"will crawl paper {paper_link}")
                         if self.child_seleniumed:
                             self.selenium_parse_child_page(paper_link)
                         else:
+                            self.my_log.info(f"will crawl paper {paper_link}")
                             yield scrapy.Request(url=paper_link, callback=self.parse_page)
                     # 翻页
                     try:
                         next_page = self.driver.find_element(By.XPATH, self.next_page_xpath)
                         if "disabled" in next_page.get_attribute("class") or not next_page:
-                            logger.info("已到达最后一页")
+                            self.my_log.info("已到达最后一页")
                             break
-                        logger.info("selenium next page")
+                        self.my_log.info("selenium next page")
                         self.driver.execute_script("arguments[0].click();", next_page)
                     except NoSuchElementException:
-                        logger.error("未找到下一页按钮")
+                        self.my_log.error("未找到下一页按钮")
                         break
                     except Exception as e:
-                        logger.error(f"点击下一页时发生错误: {e}")
+                        self.my_log.error(f"点击下一页时发生错误: {e}")
                         break
                 self.driver.close()
             # 需要滚动获取新内容
@@ -116,6 +131,10 @@ class MainCrawlSpider(scrapy.Spider):
                 last_height = self.driver.execute_script("return document.body.scrollHeight")
                 # 不停的向下滚动，直到到底
                 while True:
+                    spider_stop_signal.connect(self.spider_stop_handler_selenium, existed_signal)
+                    # 如果接收到停止信号 并且当前模式是增量模式
+                    if self.stop_signal_received:
+                        break
                     # 向页面底部滚动
                     self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
                     # 等待页面加载完成（可以根据页面的实际加载速度调整时间）
@@ -133,30 +152,32 @@ class MainCrawlSpider(scrapy.Spider):
                 elements = selector.xpath(self.save_url_xpath)
                 for element in elements:
                     paper_link = self.blog_prefix + element.extract() if self.blog_spliced else element.extract()
-                    logger.info(f"will crawl paper {paper_link}")
+
                     if self.child_seleniumed:
                         self.selenium_parse_child_page(paper_link)
                     else:
+                        self.my_log.info(f"will crawl paper {paper_link}")
                         yield scrapy.Request(url=paper_link, callback=self.parse_page)
                 self.driver.close()
         # 如果不需要，直接获取就好
         else:
             # 这里你可以根据参数定义不同的起始请求
-            logger.info("use scrapy")
+            self.my_log.info("use scrapy")
             yield scrapy.Request(url=self.start_urls[0], callback=self.parse)
 
 
     def parse(self, response):
+        spider_stop_signal.connect(self.spider_stop_handler_scrapy(), existed_signal)
         elements = response.xpath(self.save_url_xpath)
         for element in elements:
             paper_link = self.blog_prefix + element.extract() if self.blog_spliced else element.extract()
-            logger.info(f"will crawl paper {paper_link}")
+            self.my_log.info(f"will crawl paper {paper_link}")
             yield scrapy.Request(url=paper_link, callback=self.parse_page)
 
         next_page = response.xpath(self.next_page_xpath).extract_first()
         if next_page:
             next_page_url = self.next_page_prefix + next_page if self.next_page_spliced else next_page
-            logger.info("next page : {}".format(next_page_url))
+            self.my_log.info("next page : {}".format(next_page_url))
             yield scrapy.Request(url=next_page_url, callback=self.parse)
 
 
@@ -174,7 +195,7 @@ class MainCrawlSpider(scrapy.Spider):
             return
         else:
             self.requested_urls.add(url)
-
+        self.my_log.info(f"will crawl paper {url}")
         # 打开新的标签页并获取页面内容
         main_window = self.driver.current_window_handle
         self.driver.execute_script(f"window.open('{url}', '_blank');")
@@ -195,3 +216,16 @@ class MainCrawlSpider(scrapy.Spider):
         # 关闭新窗口并切换回原窗口
         self.driver.close()
         self.driver.switch_to.window(main_window)
+
+
+    def spider_stop_handler_selenium(self):
+        if not self.full_mode:
+            # 在接收到停止信号时抛出 CloseSpider 异常来停止爬虫
+            self.my_log.info('selenium: 已出现重复')
+            self.stop_signal_received = True
+
+    def spider_stop_handler_scrapy(self):
+        if not self.full_mode:
+            self.my_log.info('scrapy: 已出现重复')
+            self.crawler.engine.close_spider(self, "scrapy: 已出现重复")
+
