@@ -10,7 +10,7 @@ MITER ATLAS
 - https://security.tencent.com/index.php/blog  done
 - https://checkmarx.com/blog   done
 - https://medium.com/checkmarx-security -重定向> https://zero.checkmarx.com/, fail，selenium打不开，一直显示加载时间过长
-- https://blog.checkpoint.com done
+- https://blog.checkpoint.com done 需要关闭无头模式
 4. 媒体 
 - https://www.bleepingcomputer.com/news/security  done/fail, 偶尔会触发真人检测，尚不清楚规律，需要js 和 cookies，并且有selenium真人检测，无法规避
 - https://www.theregister.com/security   done
@@ -35,22 +35,18 @@ pip install selenium
 # 启动程序 
 ```shell
 cd /article
-python run_spider args1 args2 ...
-# 说明 不带参数就会默认爬取全部（spider_config文件夹下定义的全部），且会全量爬取(参数full(默认)/add确定，加在最后)
-python run_spider
-# 等于
-python run_spider full
-# 如果需要对全部的进行增量爬取
-python run_spider add
-# 带参数就只会爬取参数部分的， python run_spider args1 args2
-python run_spider fortinent iqt # 就只会爬取 fortinent， iqt, 默认是full
-# 等同于 
-python run_spider fortinent iqt full
-# 如果需要 add
-python run_spider fortinent iqt add
+python run_spider -m xxx -web args1 args2 ...
+# 说明 参数m指定了爬取的模式是全部爬取还是增量爬取，可选的参数为full或者add。 参数web为可选参数 如果不指定则默认全部爬取，如果指定则只爬取指定的web
+python run_spider -m full
+# 对所有的web进行全量爬取
+python run_spider -m add
+# 对所有的web进行增量爬取
+python run_spider -m add -web fortinet githubblog
+# 带参数就只会爬取参数部分的， python run_spider -m add -web args1 args2
+
 ```
 # 配置文件说明
-- 存放的文件夹 `/article_crawl/article/spider_cinfig`
+- 存放的文件夹 `/article_crawl/article/spider_config`
 - example: 文件名`githubblog.json`， 程序会通过githubblog找到该配置文件
 ```json
 {
