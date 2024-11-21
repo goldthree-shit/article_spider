@@ -69,7 +69,8 @@ class MainCrawlSpider(scrapy.Spider):
         if self.seleniumed:
             # 配置 Chrome WebDriver
             chrome_options = Options()
-            chrome_options.add_argument('--headless')  # 启用无头模式，不弹出浏览器窗口
+            if self.spider_name != 'checkpoint': # check point的爬取需要弹窗
+                chrome_options.add_argument('--headless')  # 启用无头模式，不弹出浏览器窗口
             chrome_options.add_argument('--disable-gpu')  # 禁用GPU，避免某些系统问题
             chrome_options.add_argument("--disable-blink-features=AutomationControlled")
             chrome_options.add_argument("--ignore-certificate-errors")  # 忽略 SSL 证书错误
@@ -184,6 +185,7 @@ class MainCrawlSpider(scrapy.Spider):
         item['download_html'] = response.text
         item['url'] = response.url
         item['output_dir'] = self.output_dir
+        item['web_name'] = self.spider_name
         yield item
 
 
