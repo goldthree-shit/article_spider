@@ -2,7 +2,7 @@ from loguru import logger
 import os
 
 
-def setup_spider_logger(log_file_folder: str, log_type: str, log_file_name: str):
+def setup_article_logger(log_file_folder: str, log_type: str, log_file_name: str):
     log_file_path = os.path.join(log_file_folder, log_type, log_file_name)
     os.makedirs(log_file_folder, exist_ok=True)
     
@@ -20,7 +20,7 @@ def setup_spider_logger(log_file_folder: str, log_type: str, log_file_name: str)
     return my_logger
 
 
-spider_logger = setup_spider_logger('log', 'article', 'article_{time:YYYY-MM-DD}.log')
+article_logger = setup_article_logger('log', 'article', 'article_{time:YYYY-MM-DD}.log')
 
 def setup_controller_logger(log_file_folder: str, log_file_name:str):
     log_file_path = os.path.join(log_file_folder, log_file_name)

@@ -9,7 +9,7 @@ from pathlib import Path
 
 from scrapy import signals
 
-from .config import default_logger as logger
+from logger_config import article_logger as logger
 
 from .signals import spider_stop_signal
 from .signals import existed_signal

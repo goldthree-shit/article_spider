@@ -7,8 +7,7 @@ from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
-
-from ..config import setup_logger
+from logger_config import article_logger as logger
 from ..items import ArticleItem
 from ..pipelines import ArticlePipeline
 from ..signals import existed_signal
@@ -38,7 +37,6 @@ class MainCrawlSpider(scrapy.Spider):
         self.stop_signal_received = False
         # true： 全量模式  false：增量模式
         self.full_mode = param['full_mode']
-        self.my_log = setup_logger(self.spider_name)
 
     # 初始化，配置爬虫的相关信息
     def init(self, spider_target):
@@ -88,7 +86,7 @@ class MainCrawlSpider(scrapy.Spider):
     def start_requests(self):
         # 如果需要selenium的支持，注意会比较慢，翻页和滚动都通过selenium进行
         if self.seleniumed:
-            self.my_log.info("use selenium")
+            logger.info(f"[{self.name}] use selenium")
             # Selenium 加载页面
             self.driver.get(self.start_urls[0])
             # 如果需要点击翻页
@@ -109,21 +107,21 @@ class MainCrawlSpider(scrapy.Spider):
                         if self.child_seleniumed:
                             self.selenium_parse_child_page(paper_link)
                         else:
-                            self.my_log.info(f"will crawl paper {paper_link}")
+                            logger.info(f"[{self.name}] will crawl paper {paper_link}")
                             yield scrapy.Request(url=paper_link, callback=self.parse_page)
                     # 翻页
                     try:
                         next_page = self.driver.find_element(By.XPATH, self.next_page_xpath)
                         if "disabled" in next_page.get_attribute("class") or not next_page:
-                            self.my_log.info("已到达最后一页")
+                            logger.info(f"[{self.name}] 已到达最后一页")
                             break
-                        self.my_log.info("selenium next page")
+                        logger.info(f"[{self.name}] selenium next page")
                         self.driver.execute_script("arguments[0].click();", next_page)
                     except NoSuchElementException:
-                        self.my_log.error("未找到下一页按钮")
+                        logger.error(f"[{self.name}] 未找到下一页按钮")
                         break
                     except Exception as e:
-                        self.my_log.error(f"点击下一页时发生错误: {e}")
+                        logger.error(f"[{self.name}] 点击下一页时发生错误: {e}")
                         break
                 self.driver.close()
             # 需要滚动获取新内容
@@ -156,13 +154,13 @@ class MainCrawlSpider(scrapy.Spider):
                     if self.child_seleniumed:
                         self.selenium_parse_child_page(paper_link)
                     else:
-                        self.my_log.info(f"will crawl paper {paper_link}")
+                        logger.info(f"[{self.name}] will crawl paper {paper_link}")
                         yield scrapy.Request(url=paper_link, callback=self.parse_page)
                 self.driver.close()
         # 如果不需要，直接获取就好
         else:
             # 这里你可以根据参数定义不同的起始请求
-            self.my_log.info("use scrapy")
+            logger.info(f"[{self.name}] use scrapy")
             yield scrapy.Request(url=self.start_urls[0], callback=self.parse)
 
 
@@ -171,13 +169,13 @@ class MainCrawlSpider(scrapy.Spider):
         elements = response.xpath(self.save_url_xpath)
         for element in elements:
             paper_link = self.blog_prefix + element.extract() if self.blog_spliced else element.extract()
-            self.my_log.info(f"will crawl paper {paper_link}")
+            logger.info(f"[{self.name}] will crawl paper {paper_link}")
             yield scrapy.Request(url=paper_link, callback=self.parse_page)
 
         next_page = response.xpath(self.next_page_xpath).extract_first()
         if next_page:
             next_page_url = self.next_page_prefix + next_page if self.next_page_spliced else next_page
-            self.my_log.info("next page : {}".format(next_page_url))
+            logger.info(f"[{self.name}] next page : {next_page_url}")
             yield scrapy.Request(url=next_page_url, callback=self.parse)
 
 
@@ -195,7 +193,7 @@ class MainCrawlSpider(scrapy.Spider):
             return
         else:
             self.requested_urls.add(url)
-        self.my_log.info(f"will crawl paper {url}")
+        logger.info(f"[{self.name}] will crawl paper {url}")
         # 打开新的标签页并获取页面内容
         main_window = self.driver.current_window_handle
         self.driver.execute_script(f"window.open('{url}', '_blank');")
@@ -221,11 +219,11 @@ class MainCrawlSpider(scrapy.Spider):
     def spider_stop_handler_selenium(self):
         if not self.full_mode:
             # 在接收到停止信号时抛出 CloseSpider 异常来停止爬虫
-            self.my_log.info('selenium: 已出现重复')
+            logger.info(f'[{self.name}] selenium: 已出现重复')
             self.stop_signal_received = True
 
     def spider_stop_handler_scrapy(self):
         if not self.full_mode:
-            self.my_log.info('scrapy: 已出现重复')
+            logger.info(f'[{self.name}] scrapy: 已出现重复')
             self.crawler.engine.close_spider(self, "scrapy: 已出现重复")
 
