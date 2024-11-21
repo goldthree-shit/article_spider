@@ -6,9 +6,9 @@ import hashlib
 import json
 import os
 from pathlib import Path
-
+import yaml
 from scrapy import signals
-
+from datetime import datetime
 from logger_config import article_logger as logger
 
 from .signals import spider_stop_signal
@@ -21,11 +21,15 @@ class ArticlePipeline:
         download_html = item['download_html']
 
         # 创建存储的文件夹
-        Path(output_dir).mkdir(parents=True, exist_ok=True)
-        Path(output_dir + "/html").mkdir(parents=True, exist_ok=True)
+        with open('config.yaml', 'r') as file:
+            data = yaml.safe_load(file)
+            article_save_dir = data['paths']['web']
+        crawl_date = datetime.now().strftime('%Y-%m-%d')
+        save_dir = os.path.join(article_save_dir, output_dir, crawl_date)
+        Path(save_dir).mkdir(parents=True, exist_ok=True)
 
         sha = hashlib.sha1(download_html.encode("utf-8")).hexdigest()
-        if self.check_existed(url, output_dir, sha):
+        if self.check_existed(url, save_dir, sha):
             spider_stop_signal.send_catch_log(existed_signal)
 
             return item
