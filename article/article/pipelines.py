@@ -35,7 +35,7 @@ class ArticlePipeline:
             return item
         logger.info("{} saved".format(url))
 
-        with open(f'{output_dir}/html/{sha}.html', 'w', encoding='utf-8') as f:
+        with open(f'{save_dir}/{sha}.html', 'w', encoding='utf-8') as f:
             f.write(download_html)
         return item
 
