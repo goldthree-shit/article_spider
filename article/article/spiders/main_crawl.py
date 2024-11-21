@@ -69,7 +69,8 @@ class MainCrawlSpider(scrapy.Spider):
         if self.seleniumed:
             # 配置 Chrome WebDriver
             chrome_options = Options()
-            if self.spider_name != 'checkpoint': # check point的爬取需要弹窗
+            need_head = ['checkmarx-blog', 'checkpoint']
+            if self.spider_name not in need_head: # check point的爬取需要弹窗
                 chrome_options.add_argument('--headless')  # 启用无头模式，不弹出浏览器窗口
             chrome_options.add_argument('--disable-gpu')  # 禁用GPU，避免某些系统问题
             chrome_options.add_argument("--disable-blink-features=AutomationControlled")
@@ -97,7 +98,14 @@ class MainCrawlSpider(scrapy.Spider):
                     # 如果接收到停止信号 并且当前模式是增量模式
                     if self.stop_signal_received:
                         break
+                    # 等待selenium加载完成
                     time.sleep(5)
+                    # checkmarx-blog需要移动到load page的地方才能爬取
+                    if self.spider_name == 'checkmarx-blog':
+                        element = self.driver.find_element(By.XPATH, self.next_page_xpath)
+
+                        # 滑动页面到指定的地方
+                        self.driver.execute_script("arguments[0].scrollIntoView({ behavior: 'smooth', block: 'center' });", element)
                     # 获取页面源码
                     page_source = self.driver.page_source
                     # 交给 Scrapy 解析
