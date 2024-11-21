@@ -11,5 +11,5 @@
   "next_page_xpath": "//*[@id=\"start-of-content\"]/div[2]/div/div[2]/nav/div/a[last()]/@href",
   "next_page_spliced": false,
   "next_page_prefix": "",
-  "output_dir": "githubblg_result"
+  "output_dir": "githubblog_result"
 }
