@@ -211,6 +211,7 @@ class MainCrawlSpider(scrapy.Spider):
         item['download_html'] = content
         item['url'] = url
         item['output_dir'] = self.output_dir
+        item['web_name'] = self.spider_name
         article = ArticlePipeline()
         article.process_item(item)
         # 关闭新窗口并切换回原窗口
