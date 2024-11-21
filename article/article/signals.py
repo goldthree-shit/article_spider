@@ -1,5 +1,4 @@
 # signals.py
-from gitdb.util import exists
 from scrapy.signalmanager import SignalManager
 
 # 信号
