@@ -10,15 +10,21 @@ import yaml
 from scrapy import signals
 from datetime import datetime
 from logger_config import article_logger as logger
-
+import pymysqlpool
 from .signals import spider_stop_signal
 from .signals import existed_signal
+
+pool = pymysqlpool.ConnectionPool(host='10.176.56.233', port=3310,
+                                  user='root', password='114514', database='intelligenceSource', size=3)
+
+
 
 class ArticlePipeline:
     def process_item(self, item, spider=None):
         url = item['url']
         output_dir = item['output_dir']
         download_html = item['download_html']
+        web_name = item['web_name']
 
         # 创建存储的文件夹
         with open('config.yaml', 'r') as file:
@@ -29,40 +35,37 @@ class ArticlePipeline:
         Path(save_dir).mkdir(parents=True, exist_ok=True)
 
         sha = hashlib.sha1(download_html.encode("utf-8")).hexdigest()
-        if self.check_existed(url, save_dir, sha):
-            spider_stop_signal.send_catch_log(existed_signal)
-
+        if self.check_existed(url, sha, web_name):
+            logger.info(f"[{web_name}] 爬取到重复的内容")
+            # spider_stop_signal.send_catch_log(existed_signal)
             return item
-        logger.info("{} saved".format(url))
+        else:
+            self.insert_into_db_source(url, sha, web_name, crawl_date)
+            logger.info(f"[{web_name}] saved".format(url))
+            with open(f'{save_dir}/{sha}.html', 'w', encoding='utf-8') as f:
+                f.write(download_html)
+            return item
 
-        with open(f'{save_dir}/{sha}.html', 'w', encoding='utf-8') as f:
-            f.write(download_html)
-        return item
-
-    # 检查是否已存在, 如果不存在则更新
-    def check_existed(self, url, output_dir, sha):
-        record_file = f'{output_dir}/record.json'
-
-        # 如果 record.json 文件不存在，创建文件并写入一个空字典
-        if not os.path.exists(record_file):
-            os.makedirs(output_dir, exist_ok=True)  # 确保输出目录存在
-            with open(record_file, 'w') as f:
-                json.dump({}, f)  # 默认写入空的 JSON 对象
-
-        # 读取 record.json 文件的内容
-        with open(record_file, 'r') as f:
-            record = json.load(f)
-
-        # 检查 URL 是否已经存在
-        if url in record:
-            logger.info(f"{url} existed")
-            return True
-
-        # 如果 URL 不存在，将其添加到记录中
-        record[url] = sha
-
-        # 将更新后的记录写回文件
-        with open(record_file, 'w') as f:
-            json.dump(record, f, indent=4)
-
-        return False
+    # 检查是否已存在, sha暂时保留
+    def check_existed(self, url, sha, web_name):
+       connection = pool.get_connection()
+       cursor = connection.cursor()
+       sql_query = f"""
+       SELECT * FROM source WHERE source = "{web_name}" and link = "{url}";
+       """
+       cursor.execute(sql_query)
+       result = cursor.fetchall()
+       if len(result) > 0:
+           return True
+       
+    def insert_into_db_source(self, url, sha, web_name, crawl_date):
+        connection = pool.get_connection()
+        cursor = connection.cursor()
+        sql_insert = f"""
+        INSERT INTO source (source, link, hash_value, crawl_date)
+        VALUES (%s, %s, %s, %s)
+        """
+        data = (web_name, url, sha, crawl_date)
+        cursor.execute(sql_insert, data)
+        connection.commit()
+        connection.close()
