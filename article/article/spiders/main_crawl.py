@@ -174,7 +174,7 @@ class MainCrawlSpider(scrapy.Spider):
 
 
     def parse(self, response):
-        spider_stop_signal.connect(self.spider_stop_handler_scrapy(), existed_signal)
+        spider_stop_signal.connect(self.spider_stop_handler_scrapy, existed_signal)
         elements = response.xpath(self.save_url_xpath)
         for element in elements:
             paper_link = self.blog_prefix + element.extract() if self.blog_spliced else element.extract()
