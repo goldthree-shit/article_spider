@@ -18,7 +18,6 @@ pool = pymysqlpool.ConnectionPool(host='10.176.56.233', port=3310,
                                   user='root', password='114514', database='intelligenceSource', size=3)
 
 
-
 class ArticlePipeline:
     def process_item(self, item, spider=None):
         url = item['url']
@@ -48,16 +47,19 @@ class ArticlePipeline:
 
     # 检查是否已存在, sha暂时保留
     def check_existed(self, url, sha, web_name):
-       connection = pool.get_connection()
-       cursor = connection.cursor()
-       sql_query = f"""
-       SELECT * FROM source WHERE source = "{web_name}" and link = "{url}";
-       """
-       cursor.execute(sql_query)
-       result = cursor.fetchall()
-       if len(result) > 0:
-           return True
-       
+        is_exist = False
+        connection = pool.get_connection()
+        cursor = connection.cursor()
+        sql_query = f"""
+        SELECT * FROM source WHERE source = "{web_name}" and link = "{url}";
+        """
+        cursor.execute(sql_query)
+        result = cursor.fetchall()
+        if len(result) > 0:
+            is_exist = True
+        connection.close()
+        return is_exist
+
     def insert_into_db_source(self, url, sha, web_name, crawl_date):
         connection = pool.get_connection()
         cursor = connection.cursor()
