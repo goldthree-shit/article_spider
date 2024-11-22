@@ -8,7 +8,7 @@ MITER ATLAS
 - https://blog.sonatype.com done
 - https://snyk.io/blog/category/application-security done
 - https://security.tencent.com/index.php/blog  done
-- https://checkmarx.com/blog   done
+- https://checkmarx.com/blog   done 需要关闭无头模式
 - https://medium.com/checkmarx-security -重定向> https://zero.checkmarx.com/, fail，selenium打不开，一直显示加载时间过长
 - https://blog.checkpoint.com done 需要关闭无头模式
 4. 媒体 
