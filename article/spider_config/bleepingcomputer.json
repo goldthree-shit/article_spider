@@ -1,0 +1,16 @@
+{
+  "name": "bleepingcomputer",
+  "start_urls": ["https://www.bleepingcomputer.com/news/security/"],
+  "allowed_domains": ["bleepingcomputer.com"],
+  "seleniumed": true,
+  "child_seleniumed": true,
+  "save_url_xpath": "//*[@id=\"bc-home-news-main-wrap\"]/li/div[1]/a",
+  "blog_spliced": false,
+  "blog_prefix": "https://www.bleepingcomputer.com/news/security/",
+  "clicked": false,
+  "roll": false,
+  "next_page_xpath": "",
+  "next_page_spliced": false,
+  "next_page_prefix": "https://www.bleepingcomputer.com/news/security/page/{}/",
+  "output_dir": "bleepingcomputer_result"
+}
