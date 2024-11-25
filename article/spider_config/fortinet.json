@@ -8,6 +8,7 @@
   "blog_spliced": true,
   "blog_prefix": "https://www.fortinet.com",
   "clicked": true,
+  "roll": false,
   "next_page_xpath": "/html/body/div[1]/div/section[2]/div[2]/button",
   "next_page_spliced": false,
   "next_page_prefix": "",

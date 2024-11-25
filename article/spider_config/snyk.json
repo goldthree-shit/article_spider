@@ -8,6 +8,7 @@
   "blog_spliced": true,
   "blog_prefix": "https://snyk.io",
   "clicked": true,
+  "roll": false,
   "next_page_xpath": "//a[@title='Next' and .//i[@data-component='General Icon']]/@href",
   "next_page_spliced": true,
   "next_page_prefix": "https://snyk.io",

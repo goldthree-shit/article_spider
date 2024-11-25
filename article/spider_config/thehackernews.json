@@ -8,6 +8,7 @@
   "blog_spliced": false,
   "blog_prefix": "",
   "clicked": true,
+  "roll": false,
   "next_page_xpath": "//*[@id=\"Blog1_blog-pager-older-link\"]/@href",
   "next_page_spliced": false,
   "next_page_prefix": "",

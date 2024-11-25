@@ -8,6 +8,7 @@
   "blog_spliced": false,
   "blog_prefix": "",
   "clicked": true,
+  "roll": false,
   "next_page_xpath": "//*[@id=\"next-page-tdi_21\"]",
   "next_page_spliced": false,
   "next_page_prefix": "",

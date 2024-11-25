@@ -8,6 +8,7 @@
   "blog_spliced": false,
   "blog_prefix": "",
   "clicked": true,
+  "roll": false,
   "next_page_xpath": "//*[@id=\"resource-grid\"]/div/div/div/div/div[last()]/a/@href",
   "next_page_spliced": true,
   "next_page_prefix": "https://www.sonatype.com",

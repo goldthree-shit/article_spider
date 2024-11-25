@@ -8,6 +8,7 @@
   "blog_spliced": true,
   "blog_prefix": "https://www.iqt.org",
   "clicked": true,
+  "roll": false,
   "next_page_xpath": "//*[@id=\"full-library\"]/div[2]/div[3]/a[2]",
   "next_page_spliced": false,
   "next_page_prefix": "https://www.iqt.org",
