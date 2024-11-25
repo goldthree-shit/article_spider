@@ -2,6 +2,7 @@ import json
 import time
 
 import scrapy
+import re
 from scrapy.selector import Selector
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
@@ -57,6 +58,8 @@ class MainCrawlSpider(scrapy.Spider):
         self.blog_prefix = config['blog_prefix']
         # 下一页是否需要点击
         self.clicked = config['clicked']
+        # 是否需要滚动
+        self.roll = config['roll']
         # 下一页的xpath
         self.next_page_xpath = config['next_page_xpath']
         # 获取到的链接是否需要拼接域名前缀
@@ -134,7 +137,7 @@ class MainCrawlSpider(scrapy.Spider):
                         break
                 self.driver.close()
             # 需要滚动获取新内容
-            else:
+            elif self.roll:
                 last_height = self.driver.execute_script("return document.body.scrollHeight")
                 # 不停的向下滚动，直到到底
                 while True:
@@ -166,6 +169,45 @@ class MainCrawlSpider(scrapy.Spider):
                         logger.info(f"[{self.spider_name}] will crawl paper {paper_link}")
                         yield scrapy.Request(url=paper_link, callback=self.parse_page)
                 self.driver.close()
+            else:
+                # 需要selenium但是不需要滚动和点击翻页
+                while True:
+                    spider_stop_signal.connect(self.spider_stop_handler_selenium, existed_signal)
+                    # 如果接收到停止信号 并且当前模式是增量模式
+                    if self.stop_signal_received:
+                        break
+                    while True:
+                        time.sleep(5)
+                        page_source = self.driver.page_source
+                        selector = Selector(text=page_source)
+                        elements = selector.xpath(self.save_url_xpath)
+                        
+                        if elements:
+                            for element in elements:
+                                paper_link = element.xpath('@href').get()
+                                if paper_link:
+                                    if self.child_seleniumed:
+                                        self.selenium_parse_child_page(paper_link)
+                        else:
+                            break
+                        
+                        # 下一页
+                        try:
+                            if self.spider_name == 'bleepingcomputer':
+                                url = self.driver.current_url
+                                # 获取当前的page
+                                match = re.search(r'page\/(\d+)', url)
+                                if match:
+                                    page = 2
+                                else:
+                                    page = match.group(1) + 1
+                                self.driver.get(self.next_page_prefix.format(page))
+                                logger.info(f"next page {page}")
+                            else:
+                                pass
+                        except Exception as e:
+                            logger.error(f"[{self.spider_name}] 下一页跳转错误: {e}")
+                            break
         # 如果不需要，直接获取就好
         else:
             # 这里你可以根据参数定义不同的起始请求
