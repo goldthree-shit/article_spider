@@ -58,7 +58,8 @@ python run_spider -m add -web fortinet githubblog
   "save_url_xpath": "//*[@id=\"start-of-content\"]/div[2]/div/div/article/div/h3//@href", // 访问子页面提取的xpath
   "blog_spliced": false,                              // 访问子页面提取到的xpath是否需要前缀
   "blog_prefix": "",                                //  blog_spliced = true有用，表示前缀的具体值
-  "clicked": true,                             // true 点击翻页，false滑动翻页，仅在启用了seleniumed有用，因为scrapy是直接请求接口的，与浏览器行为无关
+  "clicked": true,                             // true 点击翻页，仅在启用了seleniumed有用，因为scrapy是直接请求接口的，与浏览器行为无关
+  "roll": false,                               // false 滚动翻页，仅在启用了seleniumed有用
   "next_page_xpath": "//*[@id=\"start-of-content\"]/div[2]/div/div[2]/nav/div/a[last()]/@href", // 翻页的xpath位置，如果是使用selenium进行翻页，无需/@href部分
   "next_page_spliced": false,                     // 翻页的url是否需要拼接前缀，仅在使用scrapy时work
   "next_page_prefix": "",                          // 翻页的url是否具体拼接前缀，仅在next_page_spliced=true时work
