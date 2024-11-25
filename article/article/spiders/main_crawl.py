@@ -69,7 +69,7 @@ class MainCrawlSpider(scrapy.Spider):
         if self.seleniumed:
             # 配置 Chrome WebDriver
             chrome_options = Options()
-            need_head = ['checkmarx-blog', 'checkpoint']
+            need_head = ['checkmarx-blog', 'checkpoint', 'bleepingcomputer']
             if self.spider_name not in need_head: # check point的爬取需要弹窗
                 chrome_options.add_argument('--headless')  # 启用无头模式，不弹出浏览器窗口
             chrome_options.add_argument('--disable-gpu')  # 禁用GPU，避免某些系统问题
