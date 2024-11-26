@@ -198,9 +198,9 @@ class MainCrawlSpider(scrapy.Spider):
                                 # 获取当前的page
                                 match = re.search(r'page\/(\d+)', url)
                                 if match:
-                                    page = 2
-                                else:
                                     page = match.group(1) + 1
+                                else:
+                                    page = 2
                                 self.driver.get(self.next_page_prefix.format(page))
                                 logger.info(f"next page {page}")
                             else:
