@@ -40,7 +40,7 @@ python run_spider -m xxx -web args1 args2 ...
 python run_spider -m full
 # 对所有的web进行全量爬取
 python run_spider -m add
-# 对所有的web进行增量爬取
+# 对所有的web进行增量爬取 推荐使用 全量爬取所需的时间较长
 python run_spider -m add -web fortinet githubblog
 # 带参数就只会爬取参数部分的， python run_spider -m add -web args1 args2
 
