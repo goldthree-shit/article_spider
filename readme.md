@@ -30,7 +30,7 @@ MITER ATLAS
 ```shell
 pip install scrapy
 pip install selenium
-自行百度chrome浏览器的安装，以及相应的驱动
+见chrome测试驱动配置文档
 ```
 # 启动程序 
 ```shell
