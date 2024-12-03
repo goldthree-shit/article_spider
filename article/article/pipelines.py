@@ -36,7 +36,7 @@ class ArticlePipeline:
         sha = hashlib.sha1(download_html.encode("utf-8")).hexdigest()
         if self.check_existed(url, sha, web_name):
             logger.info(f"[{web_name}] 爬取到重复的内容")
-            # spider_stop_signal.send_catch_log(existed_signal)
+            spider_stop_signal.send_catch_log(existed_signal)
             return item
         else:
             self.insert_into_db_source(url, sha, web_name, crawl_date)
