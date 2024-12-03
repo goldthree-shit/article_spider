@@ -115,12 +115,16 @@ class MainCrawlSpider(scrapy.Spider):
                     selector = Selector(text=page_source)
                     elements = selector.xpath(self.save_url_xpath)
                     for element in elements:
+                        if self.stop_signal_received:  
+                            break
                         paper_link = self.blog_prefix + element.extract() if self.blog_spliced else element.extract()
                         if self.child_seleniumed:
                             self.selenium_parse_child_page(paper_link)
                         else:
                             logger.info(f"[{self.spider_name}] will crawl paper {paper_link}")
                             yield scrapy.Request(url=paper_link, callback=self.parse_page)
+                    if self.stop_signal_received:
+                        break
                     # 翻页
                     try:
                         next_page = self.driver.find_element(By.XPATH, self.next_page_xpath)
@@ -161,6 +165,8 @@ class MainCrawlSpider(scrapy.Spider):
                 selector = Selector(text=page_source)
                 elements = selector.xpath(self.save_url_xpath)
                 for element in elements:
+                    if self.stop_signal_received:
+                        break
                     paper_link = self.blog_prefix + element.extract() if self.blog_spliced else element.extract()
 
                     if self.child_seleniumed:
@@ -176,38 +182,44 @@ class MainCrawlSpider(scrapy.Spider):
                     # 如果接收到停止信号 并且当前模式是增量模式
                     if self.stop_signal_received:
                         break
-                    while True:
-                        time.sleep(5)
-                        page_source = self.driver.page_source
-                        selector = Selector(text=page_source)
-                        elements = selector.xpath(self.save_url_xpath)
-                        
-                        if elements:
-                            for element in elements:
-                                paper_link = element.xpath('@href').get()
-                                if paper_link:
-                                    if self.child_seleniumed:
-                                        self.selenium_parse_child_page(paper_link)
-                        else:
-                            break
-                        
-                        # 下一页
-                        try:
-                            if self.spider_name == 'bleepingcomputer':
-                                url = self.driver.current_url
-                                # 获取当前的page
-                                match = re.search(r'page\/(\d+)', url)
-                                if match:
-                                    page = int(match.group(1)) + 1
-                                else:
-                                    page = 2
-                                self.driver.get(self.next_page_prefix.format(page))
-                                logger.info(f"next page {page}")
+                   
+                    time.sleep(5)
+                    page_source = self.driver.page_source
+                    selector = Selector(text=page_source)
+                    elements = selector.xpath(self.save_url_xpath)
+                    
+                    if elements:
+                        for element in elements:
+                            if self.stop_signal_received:
+                                break
+                            paper_link = element.xpath('@href').get()
+                            if paper_link:
+                                if self.child_seleniumed:
+                                    self.selenium_parse_child_page(paper_link)
+                    else:
+                        break
+                    
+                    # 下一页
+                    if self.stop_signal_received:
+                        break
+                    try:
+                        if self.spider_name == 'bleepingcomputer':
+                            url = self.driver.current_url
+                            # 获取当前的page
+                            match = re.search(r'page\/(\d+)', url)
+                            if match:
+                                page = int(match.group(1)) + 1
                             else:
-                                pass
-                        except Exception as e:
-                            logger.error(f"[{self.spider_name}] 下一页跳转错误: {e}")
-                            break
+                                page = 2
+                            self.driver.get(self.next_page_prefix.format(page))
+                            logger.info(f"next page {page}")
+                        else:
+                            pass
+                    except Exception as e:
+                        logger.error(f"[{self.spider_name}] 下一页跳转错误: {e}")
+                        break
+            # 关闭浏览器
+            self.driver.quit()
         # 如果不需要，直接获取就好
         else:
             # 这里你可以根据参数定义不同的起始请求
