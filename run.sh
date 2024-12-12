@@ -1,0 +1,17 @@
+python run_spider.py -web bleepingcomputer -m add
+python run_spider.py -web checkmarx-blog -m add
+python run_spider.py -web checkpoint -m add
+python run_spider.py -web cybersecuritynews -m add
+python run_spider.py -web fortinet -m add
+python run_spider.py -web githubblog -m add
+python run_spider.py -web iqt -m add
+python run_spider.py -web jfrog -m add
+python run_spider.py -web phylum -m add
+python run_spider.py -web reversinglabs -m add
+python run_spider.py -web securityintelligence -m add
+python run_spider.py -web snyk -m add
+python run_spider.py -web socketdev -m add
+python run_spider.py -web sonatype -m add
+python run_spider.py -web tencent -m add
+python run_spider.py -web thehackernews -m add
+python run_spider.py -web theregister -m add
